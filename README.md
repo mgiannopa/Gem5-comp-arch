@@ -14,7 +14,7 @@
 - Cpu type: atomic
 - Cpu frequency: 1GHz
 - Number of cores: 1
-- Type of memory: DDR3\_1600\_8x8
+- Type of memory: DDR3_1600_8x8
 - Number of memory channels: 2
 - Number of memory ranks per channel: None
 - Physical memory size: 2Gb
@@ -87,7 +87,11 @@ host_inst_rate: Αναφέρεται στον ρυθμός εντολών που
 Για τον TimingSimpleCPU έχουμε sim_seconds 0.000527 και host_seconds 0.03.  
 Οι χρόνοι αυξήθηκαν σημαντικά, εξαιτίας και της σημαντικής μείωσης της συχνότητας λειτουργίας. Για την αλλαγή της συχνότητας τρέχουμε την παραπάνω εντολή προσθέτωντας μετά την επιλογή του τύπου του επεξεργαστή.  
 `--cpu-clock=0.1GHz`  
-
+Τώρα θα γίνει εκ νέου re-run με αλλαγή του τύπου της μνήμης από DDR3_1600_8x8 σε DDR4_2400_8x8. 
+Για MinorCPU έχουμε έχουμε sim_seconds 0.000039 και host_seconds 0.06.  
+Για TimingSimpleCPU έχουμε sim_seconds 0.000051 και host_seconds 0.02.   
+Παρατηρείται μία μικρή βελτίωση στον χρόνο της MinorCPU όχι όμως και στης TimingSimpleCPU. Για την αλλαγή του τύπου αυτόθ χρησιμοποίηθηκε η αρχική εντολή του Fibonacci προσθέτωντας μετά την επιλογή του τύπου του επεξεργαστή.  
+`--mem-type=DDR4_2400_8x8`  
 
  
 
