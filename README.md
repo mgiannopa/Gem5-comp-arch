@@ -34,7 +34,7 @@
 - Στην γραμμή 1296 του αρχείου: ranks_per_channel=2
 - Στην γραμμή 1419 του αρχείου: type=CoherentxBar για το membus
 - Στις γραμμές 1450-1453 του αρχείου:
-  - [system.voltage\_domain]
+  - [system.voltage_domain]
   - type=VoltageDomain
   - eventq_index=0
   -voltage=3.3
