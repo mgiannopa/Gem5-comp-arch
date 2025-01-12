@@ -24,10 +24,10 @@
 ## Επαλήθευση των χαρακτηριστικών με χρήση των αρχείων config.ini, config.json.
 Αρχικά θα επικεντρωθούμε στο αρχείο config.ini. Για να βρούμε το αρχέιο πρέπει να πάμε στον φάκελο hello_results στον οποίο πριν κατά την εκτέλεση της εντολής μας ορίζουμε ρητά να αποθηκευτούν μέσα σε αυτόν τα αποτελέμσατα.  
 Αναλυτικότερα:
-- Στην γραμμή 15 του αρχείου: \en cache\_line\_size=64\gr
-- Στην γραμμή 67 του αρχείου: \en Type=MinorCPU\gr
+- Στην γραμμή 15 του αρχείου: cache_line_size=64
+- Στην γραμμή 67 του αρχείου:  Type=MinorCPU
 - Στις γραμμές 1223-1226 του αρχείου:
-  - [system.cpu\_cluster.voltage\_domain]
+  - [system.cpu_cluster.voltage_domain]
   - type=VoltageDomain
   - eventq_index=0
   - voltage=1.2
