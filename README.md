@@ -40,7 +40,7 @@
   - eventq_index=0
   -voltage=3.3
 
-Τώρα θα γίνει μελέτη του \en config.json.\gr
+Τώρα θα γίνει μελέτη του config.json.
 
 - Στην γραμμή 30 του αρχείου: "type": "CoherentXBar"
 - Στις γραμμές 102-107 του αρχείου: "voltage_domain":
