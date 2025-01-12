@@ -5,8 +5,8 @@
 - Voltage domain for system components: 3.3V
 - Clock domain for system components: 1GHz
 - Voltage for the CPU core: 1.2V
--Off Chip Memory bus type: SystemxBar
--Caches:
+- Off Chip Memory bus type: SystemxBar
+- Caches:
    - L1 cache: L1I (instruction cache), L1D (data cache)
    - Walk cache
    - L2 cache
