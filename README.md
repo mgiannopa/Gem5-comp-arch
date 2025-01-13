@@ -105,9 +105,33 @@ host_inst_rate: Αναφέρεται στον ρυθμός εντολών που
 - Στην γραμμή 852 : assoc = 2 (LI)
 - Στην γραμμή 1018/1060 : size = 2097152 (L2)
 - Στην γραμμή 1057 : assoc = 8 (L2)
+### Benchmarks  
+Τα γραφήματα των benchmarks υπάρχουν εντός του φακέλου `graphs_from_benchmarks` και ο κώδικας που χρησιμοποιήθηκε για την πραγωγή τους, εντός του φακέλου second_part.  Για την παραγωγή τους χρησιμοποιήθηκε το αντίστοιχο stats.txt file.  Οι εντολές για να τρέξουν τα benchmarks μας δίνονταν στην εκφώνηση και πιο συγκεκριμένα είναι:  
+```bash
+$ ./build/ARM/gem5.opt -d spec_results2/specbzip configs/example/se.py --cpu-type=MinorCPU --cpu-clock=1GHz --caches --l2cache -c spec_cpu2006/401.bzip2/src/specbzip -o "spec_cpu2006/401.bzip2/data/input.program 10" -I 100000000
 
-  rgrg
-  
+$ ./build/ARM/gem5.opt -d spec_results2/specmcf configs/example/se.py --cpu-type=MinorCPU --cpu-clock=1GHz --caches --l2cache -c spec_cpu2006/429.mcf/src/specmcf -o "spec_cpu2006/429.mcf/data/inp.in" -I 100000000
+
+$ ./build/ARM/gem5.opt -d spec_results2/spechmmer configs/example/se.py --cpu-type=MinorCPU --cpu-clock=1GHz --caches --l2cache -c spec_cpu2006/456.hmmer/src/spechmmer -o "--fixed 0 --mean 325 --num 45000 --sd 200 --seed 0 spec_cpu2006/456.hmmer/data/bombesin.hmm" -I 100000000
+
+$ ./build/ARM/gem5.opt -d spec_results2/specsjeng configs/example/se.py --cpu-type=MinorCPU --cpu-clock=1GHz --caches --l2cache -c spec_cpu2006/458.sjeng/src/specsjeng -o "spec_cpu2006/458.sjeng/data/test.txt" -I 100000000
+
+$ ./build/ARM/gem5.opt -d spec_results2/speclibm configs/example/se.py --cpu-type=MinorCPU --cpu-clock=1GHz --caches --l2cache -c spec_cpu2006/470.lbm/src/speclibm -o "20 spec_cpu2006/470.lbm/data/lbm.in 0 1 spec_cpu2006/470.lbm/data/100_100_130_cf_a.of" -I 100000000
+```  
+### Αλλαγή συχνότητας λειτουργίας  
+Στην συνέχεια μας ζητήθηκε να αλλάξουμε την συχνότητα λειτουργίας αρχικά σε 1GHz και έπειτα σε 3GHz. Για τον σκόπο αυτό οι παραπάνω εντολές έγιναν re-run με την προσθήκη `--cpu-clock=1GHZ --cpu-clock=3GHz` αντίστοιχα. Τα αποτελέσματα τους βρίσκονται στους αντίστοιχους φακέλους. Αναλύοντας το αρχικό stats.txt παρατηρούμε 2 διαφορετικά domain clock:
+- system.clk_domain.clock        1000 (γραμμή 289)  
+- system.cpu_clk_domain.clock    500 (γραμμή 758)
+Με την αλλαγή της συχνότητας σε 1GHz παρατηρούμε:  
+- system.clk_domain.clock        1000 (γραμμή 289)  
+- system.cpu_clk_domain.clock    1000 (γραμμή 758)
+Ενώ με την αλλάγη της συχνότητας σε 3GHz:  
+- system.clk_domain.clock        1000 (γραμμή 289)  
+- system.cpu_clk_domain.clock    333 (γραμμή 758)  
+(Χρησιμοποιήθηκε το system.cpu_clk_domain.clock και όχι το cpu_cluster.clk_domain.clock που μας δίνεται διότι δεν συναντάται στο αρχείο.)  
+Καταλήγουμε στο συμπέρεσμα ότι η εντολή που χρησιμοποιήθηκε για την αλλαγή της συχνότητας επηρεάζει μόνο αυτή του επεξεργαστή και όχι του συνολικού συστήματος. Αυτό συμβαίνει λόγω της εντολής που χρησιμοποιούμε, αλλά και από το γεγονός πως ο επεξεργαστής πολλές φορές πρέπει να χρονίζεται πιο γρήγορα εξαιτίας και του όκγου των διεργασιών που επιτελεί. Η προσθήκη ενός ακομά επεξεργαστή θα τον έκανε να χρονίζεται με το system.cpu_clk_domain.clock. Μέσω του config.json βλέπουμε ότι οποισδήποτε χρονισμός αφορά μέρος του επεξεργαστή κληρονομεί το ρολόι σύμφωνα με το `system.cpu_clk_domain.clock`, ενώ οτιδήποτε άλλο (πχ μνήμες) σύμφωνα εμ το `system.clk_domain.clock`.
+
+   
   
  
 
