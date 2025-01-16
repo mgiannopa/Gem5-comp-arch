@@ -144,7 +144,7 @@ $ ./build/ARM/gem5.opt -d spec_results2/speclibm configs/example/se.py --cpu-typ
 Αρχικά διπλασσίαστηκε το l1i_size και assoc το νέο cpi = 1.155442.
 Έπειτα διπλασσιάστηκε και το cacheline_size με νέο cpi = 1.124752.
 Τώρα διπλασσιάστηκε και πάλι το l1i_size και assoc το νέο cpi = 1.124752 άρα δεν υπήρχε αλλαγή.
-Τέλος το l2_size και assoc διπλασσιάστηκαν με νέο cpi = 1.124394
+Τέλος το l2_size και assoc διπλασσιάστηκαν με νέο cpi = 1.124394.
 #### Spechmmer  
 Αρχικά διπλασσιάστηκε τόσο το size όσο και το associativity της L2 cache, το νέο cpi = 1.187917. Τώρα διπλασσιάστηκε το cacheline_size με νέο cpi = 1.181978. 
 #### Specsjeng  
@@ -156,28 +156,38 @@ $ ./build/ARM/gem5.opt -d spec_results2/speclibm configs/example/se.py --cpu-typ
 ### Συνάρτηση κόστους  
 Έστω C=0.7* (S1+S2) + 0.3 * S3 + 0.5(A1 + A2) + 0.2 * A3 + 0.3 L  
 με S1,S2,S3 τα μεγέθη των l1d,l1i και l2 αντίστοιχα. Ομοίως για τα Α με τα associativity. Τέλος με L το μέγεθος την cacheline. Στην αρχική αρχιτεκτονική του συτήματος το κόστος C=90.6. Έχουμε :
-- Specbzip1 C = 112  
-- Specbzip2 C = 157.8  
-- Specbzip3 C = 159.8  
+- Specbzip1 C = 112, Cpi = 1.647684  
+- Specbzip2 C = 157.8, Cpi = 1.600894  
+- Specbzip3 C = 159.8, Cpi = 1.592107  
 
 
-- Specmcf1 C =114  
-- Specmcf2 C = 133.2  
-- Specmcf3 C = 180  
-- Specmcf4 C = 182.2  
+- Specmcf1 C =114, Cpi = 1.155442  
+- Specmcf2 C = 133.2, Cpi = 1.124752  
+- Specmcf3 C = 180, Cpi = 1.124752  
+- Specmcf4 C = 182.2, Cpi = 1.124394  
 
-- Spechmmer1 C =92.8  
-- Spechmmer2 C =112  
+- Spechmmer1 C =92.8, Cpi = 1.187917  
+- Spechmmer2 C =112, Cpi = 1.181978  
 
-- Specjeng1 C =138.6  
-- Specjeng2 C =157.8  
-- Specjeng3 C =196.2  
-- Specjeng4 C =733.8
+- Specjeng1 C =138.6, Cpi = 10.265689  
+- Specjeng2 C =157.8, Cpi = 6.795891  
+- Specjeng3 C =196.2, Cpi = 3.942442  
+- Specjeng4 C =733.8, Cpi = 3.072115  
 
-- Speclibm1 C = 155.2  
-- Speclibm2 C = 148.2  
-- Speclibm2 C = 225  
+- Speclibm1 C = 155.2, Cpi = 2.57667  
+- Speclibm2 C = 148.2, Cpi = 1.990648 
+- Speclibm2 C = 225, Cpi = 1.704294  
 
+Η βέλτιστη αρχιτεκτονική για κάθε benchmark είναι :
+  - Specbzip2
+  - Specmcf2
+  - Spechmmer1
+  - Specjeng3
+  - Speclibm2
+
+## Αναφορές
+https://www.gem5.org/  
+https://www.geeksforgeeks.org/
 
 
 
