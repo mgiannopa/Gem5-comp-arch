@@ -137,8 +137,8 @@ $ ./build/ARM/gem5.opt -d spec_results2/speclibm configs/example/se.py --cpu-typ
 ### Design Exploration  
 #### Specbzip  
 Για το πρώτο run του specbzip διπλασσιάστηκε το cacheline_size, το L2_size και το l2 assoc, καθώς όπως είδαμε και στα γραφήματα του πορηγούμενου ερωτήματος το l2 είχε σηματνικό miss rate, έτσι επιτεύχθηκε το cpi = 1.647684.
-Στην συνέχεια διπλασσιάστηκε ξανά το l2_size, το l1d_size και l1d_assoc μαζί με τις αλλαγές του πρώτου run, cpi = 1.600894. 
- Διπλασσιάστηκε το assoc τηςς lid και προέκυψε cpi = 1.592107.  
+Στην συνέχεια διπλασσιάστηκε το l1d_size και l1d_assoc μαζί με τις αλλαγές του πρώτου run, cpi = 1.600894. 
+Διπλασσιάστηκε το assoc τηςς lid και προέκυψε cpi = 1.592107.  
 #### Specmcf  
 Για το συγκεκριμένο benchmark παρατηρούμε ότι το l1i miss rate είναι απαγορευτικό, για αυτό και οι βελτιστοποιήσεις θα επικεντρωθούν γύρω από την συγκεκριμένη παράμετρο.  
 Αρχικά διπλασσίαστηκε το l1i_size και assoc το νέο cpi = 1.155442.
@@ -146,14 +146,37 @@ $ ./build/ARM/gem5.opt -d spec_results2/speclibm configs/example/se.py --cpu-typ
 Τώρα διπλασσιάστηκε και πάλι το l1i_size και assoc το νέο cpi = 1.124752 άρα δεν υπήρχε αλλαγή.
 Τέλος το l2_size και assoc διπλασσιάστηκαν με νέο cpi = 1.124394
 #### Spechmmer  
-Αρχικά διπλασσιάστηκε τόσο το size όσο και το associativity της L2 cache, το νέο cpi = 1.187917. Τώρα διπλασσιάστηκε το cacheline_size με νέο cpi = 1.181978. Τέλος διπλασσιάστηκε το L2_size, L1_size και assoc με νέο cpi = 1.185883.  
+Αρχικά διπλασσιάστηκε τόσο το size όσο και το associativity της L2 cache, το νέο cpi = 1.187917. Τώρα διπλασσιάστηκε το cacheline_size με νέο cpi = 1.181978. 
 #### Specsjeng  
-Διπλασσιάστηκε το l2, l1 size και assoc με νέο cpi = 10.265689. Διπλασσιάζοντας και το cacheline_size προκύπτει cpi = 6.795891. Παρατηρούμε την πολύ μεγάλη αλλαγή με βάση το cacheline_size και το τετραπλασσιάοζυμε με νέο cpi = 3.942442. Θα αυξήσουμε πάρα πολύ το cacheline_size αγνοώντας το κόστος του με μόνο σκόπο το ελάχιστο cpi. Re-run με cacheline_size =2048
+Διπλασσιάστηκε το l2, l1 size και assoc με νέο cpi = 10.265689. Διπλασσιάζοντας και το cacheline_size προκύπτει cpi = 6.795891. Παρατηρούμε την πολύ μεγάλη αλλαγή με βάση το cacheline_size και το τετραπλασσιάοζυμε με νέο cpi = 3.942442. Θα αυξήσουμε πάρα πολύ το cacheline_size αγνοώντας το κόστος του με μόνο σκόπο το ελάχιστο cpi. Re-run με cacheline_size =2048(*32)
 με cpi = 3.072115.  
 #### Speclibm  
 Αρχικά διπλασσιάστηκε το l1d l2 size και το cacheline_size με το νέο cpi να είναι 2.57667. Επείτα έγινε re run με τις αρχικές παραμέτρους με μόνη αλλαγή τον τετραπλασσιασμό του cacheline_size με cpi =  1.990648. Εκ νέου διπλασσιασμός του cacheline_size με cpi = 1.704294.  
 
 ### Συνάρτηση κόστους  
+Έστω C=0.7* (S1+S2) + 0.3 * S3 + 0.5(A1 + A2) + 0.2 * A3 + 0.3 L  
+με S1,S2,S3 τα μεγέθη των l1d,l1i και l2 αντίστοιχα. Ομοίως για τα Α με τα associativity. Τέλος με L το μέγεθος την cacheline. Στην αρχική αρχιτεκτονική του συτήματος το κόστος C=90.6. Έχουμε :
+- Specbzip1 C = 112  
+- Specbzip2 C = 157.8  
+- Specbzip3 C = 159.8  
+
+
+- Specmcf1 C =114  
+- Specmcf2 C = 133.2  
+- Specmcf3 C = 180  
+- Specmcf4 C = 182.2  
+
+- Spechmmer1 C =92.8  
+- Spechmmer2 C =112  
+
+- Specjeng1 C =138.6  
+- Specjeng2 C =157.8  
+- Specjeng3 C =196.2  
+- Specjeng4 C =733.8
+
+- Speclibm1 C = 155.2  
+- Speclibm2 C = 148.2  
+- Speclibm2 C = 225  
 
 
 
