@@ -95,7 +95,7 @@ host_inst_rate: Αναφέρεται στον ρυθμός εντολών που
 Παρατηρείται μία μικρή βελτίωση στον χρόνο της MinorCPU όχι όμως και στης TimingSimpleCPU, αυτό βασίζεται στο γεγονός ότι ο συγκεκριμένος τύπος CPU υποθέτει έναν στατικό χρόνο εκτέλεσης της εντολής. Για την αλλαγή του τύπου της μνήμης χρησιμοποίηθηκε η αρχική εντολή του Fibonacci προσθέτωντας μετά την επιλογή του τύπου του επεξεργαστή.  
 `--mem-type=DDR4_2400_8x8`  
 Σίγουρα ένας συνδυασμός της αύξησης τόσο της συχνότητας λειτουργίας όσο και της ταχύτητας της μνήμης θα έχει τα βέλτιστα αποτελέσματα.  
-## Δεύτερο Μέρος :
+## Δεύτερο Μέρος :  
 ### Χαρακτηριστικά επεξεργαστή (spec_cpu2006)  
 Από το πρώτο benchmark που τρέχουμε και πηγαίνοντας στο config.ini παρατηρούμε:
 - Στην γραμμή 15 : cache_line_size = 64
@@ -105,9 +105,94 @@ host_inst_rate: Αναφέρεται στον ρυθμός εντολών που
 - Στην γραμμή 852 : assoc = 2 (LI)
 - Στην γραμμή 1018/1060 : size = 2097152 (L2)
 - Στην γραμμή 1057 : assoc = 8 (L2)
+### Benchmarks  
+Τα γραφήματα των benchmarks υπάρχουν εντός του φακέλου `graphs_from_benchmarks` και ο κώδικας που χρησιμοποιήθηκε για την πραγωγή τους, εντός του φακέλου second_part.  Για την παραγωγή τους χρησιμοποιήθηκε το αντίστοιχο stats.txt file.  Οι εντολές για να τρέξουν τα benchmarks μας δίνονταν στην εκφώνηση και πιο συγκεκριμένα είναι:  
+```bash
+$ ./build/ARM/gem5.opt -d spec_results2/specbzip configs/example/se.py --cpu-type=MinorCPU --cpu-clock=1GHz --caches --l2cache -c spec_cpu2006/401.bzip2/src/specbzip -o "spec_cpu2006/401.bzip2/data/input.program 10" -I 100000000
 
-  rgrg
-  
+$ ./build/ARM/gem5.opt -d spec_results2/specmcf configs/example/se.py --cpu-type=MinorCPU --cpu-clock=1GHz --caches --l2cache -c spec_cpu2006/429.mcf/src/specmcf -o "spec_cpu2006/429.mcf/data/inp.in" -I 100000000
+
+$ ./build/ARM/gem5.opt -d spec_results2/spechmmer configs/example/se.py --cpu-type=MinorCPU --cpu-clock=1GHz --caches --l2cache -c spec_cpu2006/456.hmmer/src/spechmmer -o "--fixed 0 --mean 325 --num 45000 --sd 200 --seed 0 spec_cpu2006/456.hmmer/data/bombesin.hmm" -I 100000000
+
+$ ./build/ARM/gem5.opt -d spec_results2/specsjeng configs/example/se.py --cpu-type=MinorCPU --cpu-clock=1GHz --caches --l2cache -c spec_cpu2006/458.sjeng/src/specsjeng -o "spec_cpu2006/458.sjeng/data/test.txt" -I 100000000
+
+$ ./build/ARM/gem5.opt -d spec_results2/speclibm configs/example/se.py --cpu-type=MinorCPU --cpu-clock=1GHz --caches --l2cache -c spec_cpu2006/470.lbm/src/speclibm -o "20 spec_cpu2006/470.lbm/data/lbm.in 0 1 spec_cpu2006/470.lbm/data/100_100_130_cf_a.of" -I 100000000
+```  
+### Αλλαγή συχνότητας λειτουργίας  
+Στην συνέχεια μας ζητήθηκε να αλλάξουμε την συχνότητα λειτουργίας αρχικά σε 1GHz και έπειτα σε 3GHz. Για τον σκόπο αυτό οι παραπάνω εντολές έγιναν re-run με την προσθήκη `--cpu-clock=1GHZ --cpu-clock=3GHz` αντίστοιχα. Τα αποτελέσματα τους βρίσκονται στους αντίστοιχους φακέλους. Αναλύοντας το αρχικό stats.txt παρατηρούμε 2 διαφορετικά domain clock:
+- system.clk_domain.clock        1000 (γραμμή 289)  
+- system.cpu_clk_domain.clock    500 (γραμμή 758)
+Με την αλλαγή της συχνότητας σε 1GHz παρατηρούμε:  
+- system.clk_domain.clock        1000 (γραμμή 289)  
+- system.cpu_clk_domain.clock    1000 (γραμμή 758)
+Ενώ με την αλλάγη της συχνότητας σε 3GHz:  
+- system.clk_domain.clock        1000 (γραμμή 289)  
+- system.cpu_clk_domain.clock    333 (γραμμή 758)  
+(Χρησιμοποιήθηκε το system.cpu_clk_domain.clock και όχι το cpu_cluster.clk_domain.clock που μας δίνεται διότι δεν συναντάται στο αρχείο.)  
+Καταλήγουμε στο συμπέρεσμα ότι η εντολή που χρησιμοποιήθηκε για την αλλαγή της συχνότητας επηρεάζει μόνο αυτή του επεξεργαστή και όχι του συνολικού συστήματος. Αυτό συμβαίνει λόγω της εντολής που χρησιμοποιούμε, αλλά και από το γεγονός πως ο επεξεργαστής πολλές φορές πρέπει να χρονίζεται πιο γρήγορα εξαιτίας και του όκγου των διεργασιών που επιτελεί. Η προσθήκη ενός ακομά επεξεργαστή θα τον έκανε να χρονίζεται με το system.cpu_clk_domain.clock. Μέσω του config.json βλέπουμε ότι οποισδήποτε χρονισμός αφορά μέρος του επεξεργαστή κληρονομεί το ρολόι σύμφωνα με το `system.cpu_clk_domain.clock`, ενώ οτιδήποτε άλλο (πχ μνήμες) σύμφωνα εμ το `system.clk_domain.clock`.
+Δεν υπάρχει τέλειο scaling, καθώς ο τριπλασιασμός της συχνότητας δεν υποτριπλασιάζει τον χρόνο εκτέλεσης, όπως μπορούμε να παρατηρήσουμε στα αντίστοιχα stats.txt.
+### Αλλαγή μνήμης 
+Τέλος έγινε αλλαγή του τύπους της μνήμης στην DDR3_2133_8x8 (καθώς δεν υπήρχε η DDR3_2133_x64 kαι ήταν η μόνη DDR3 με μεγαλύτερη ταχύτητα λειτουργίας.). Για την αλλαγή αυτή χρησιμοποιήθηκε η βασική συχνότητα λειτουργίας, επομένως τρέξαμε την αρχική εντολή για το benchmark του specbzip προσθέτωντας αυτή την φορά το `--mem-type=DDR3_2133_8x8`.  
+Παρατηρήθηκε μια πολύ μικρή μείωση του χρόνου από  0.083982 σε 0.083609. Η αλλαγή αφορούσε το πρώτο benchmark(specbzip). Τα αρχεία που παράχθηκαν με την αλλαγή της μνήμης βρίσκονται εντός του φακέλου specbzip2133.  
+### Design Exploration  
+#### Specbzip  
+Για το πρώτο run του specbzip διπλασσιάστηκε το cacheline_size, το L2_size και το l2 assoc, καθώς όπως είδαμε και στα γραφήματα του πορηγούμενου ερωτήματος το l2 είχε σηματνικό miss rate, έτσι επιτεύχθηκε το cpi = 1.647684.
+Στην συνέχεια διπλασσιάστηκε το l1d_size και l1d_assoc μαζί με τις αλλαγές του πρώτου run, cpi = 1.600894. 
+Διπλασσιάστηκε το assoc τηςς lid και προέκυψε cpi = 1.592107.  
+#### Specmcf  
+Για το συγκεκριμένο benchmark παρατηρούμε ότι το l1i miss rate είναι απαγορευτικό, για αυτό και οι βελτιστοποιήσεις θα επικεντρωθούν γύρω από την συγκεκριμένη παράμετρο.  
+Αρχικά διπλασσίαστηκε το l1i_size και assoc το νέο cpi = 1.155442.
+Έπειτα διπλασσιάστηκε και το cacheline_size με νέο cpi = 1.124752.
+Τώρα διπλασσιάστηκε και πάλι το l1i_size και assoc το νέο cpi = 1.124752 άρα δεν υπήρχε αλλαγή.
+Τέλος το l2_size και assoc διπλασσιάστηκαν με νέο cpi = 1.124394.
+#### Spechmmer  
+Αρχικά διπλασσιάστηκε τόσο το size όσο και το associativity της L2 cache, το νέο cpi = 1.187917. Τώρα διπλασσιάστηκε το cacheline_size με νέο cpi = 1.181978. 
+#### Specsjeng  
+Διπλασσιάστηκε το l2, l1 size και assoc με νέο cpi = 10.265689. Διπλασσιάζοντας και το cacheline_size προκύπτει cpi = 6.795891. Παρατηρούμε την πολύ μεγάλη αλλαγή με βάση το cacheline_size και το τετραπλασσιάοζυμε με νέο cpi = 3.942442. Θα αυξήσουμε πάρα πολύ το cacheline_size αγνοώντας το κόστος του με μόνο σκόπο το ελάχιστο cpi. Re-run με cacheline_size =2048(*32)
+με cpi = 3.072115.  
+#### Speclibm  
+Αρχικά διπλασσιάστηκε το l1d l2 size και το cacheline_size με το νέο cpi να είναι 2.57667. Επείτα έγινε re run με τις αρχικές παραμέτρους με μόνη αλλαγή τον τετραπλασσιασμό του cacheline_size με cpi =  1.990648. Εκ νέου διπλασσιασμός του cacheline_size με cpi = 1.704294.  
+
+### Συνάρτηση κόστους  
+Έστω C=0.7* (S1+S2) + 0.3 * S3 + 0.5(A1 + A2) + 0.2 * A3 + 0.3 L  
+με S1,S2,S3 τα μεγέθη των l1d,l1i και l2 αντίστοιχα. Ομοίως για τα Α με τα associativity. Τέλος με L το μέγεθος την cacheline. Στην αρχική αρχιτεκτονική του συτήματος το κόστος C=90.6. Έχουμε :
+- Specbzip1 C = 112, Cpi = 1.647684  
+- Specbzip2 C = 157.8, Cpi = 1.600894  
+- Specbzip3 C = 159.8, Cpi = 1.592107  
+
+
+- Specmcf1 C =114, Cpi = 1.155442  
+- Specmcf2 C = 133.2, Cpi = 1.124752  
+- Specmcf3 C = 180, Cpi = 1.124752  
+- Specmcf4 C = 182.2, Cpi = 1.124394  
+
+- Spechmmer1 C =92.8, Cpi = 1.187917  
+- Spechmmer2 C =112, Cpi = 1.181978  
+
+- Specjeng1 C =138.6, Cpi = 10.265689  
+- Specjeng2 C =157.8, Cpi = 6.795891  
+- Specjeng3 C =196.2, Cpi = 3.942442  
+- Specjeng4 C =733.8, Cpi = 3.072115  
+
+- Speclibm1 C = 155.2, Cpi = 2.57667  
+- Speclibm2 C = 148.2, Cpi = 1.990648 
+- Speclibm2 C = 225, Cpi = 1.704294  
+
+Η βέλτιστη αρχιτεκτονική για κάθε benchmark είναι :
+  - Specbzip2
+  - Specmcf2
+  - Spechmmer1
+  - Specjeng3
+  - Speclibm2
+
+## Αναφορές
+https://www.gem5.org/  
+https://www.geeksforgeeks.org/
+
+
+
+
+   
   
  
 
