@@ -151,7 +151,10 @@ $ ./build/ARM/gem5.opt -d spec_results2/speclibm configs/example/se.py --cpu-typ
 Διπλασσιάστηκε το l2, l1 size και assoc με νέο cpi = 10.265689. Διπλασσιάζοντας και το cacheline_size προκύπτει cpi = 6.795891. Παρατηρούμε την πολύ μεγάλη αλλαγή με βάση το cacheline_size και το τετραπλασσιάοζυμε με νέο cpi = 3.942442. Θα αυξήσουμε πάρα πολύ το cacheline_size αγνοώντας το κόστος του με μόνο σκόπο το ελάχιστο cpi. Re-run με cacheline_size =2048
 με cpi = 3.072115.  
 #### Speclibm  
-Αρχικά διπλασσιάστηκε το l1d l2 size και assoc και το cacheline_size με το νέο cpi να είναι 
+Αρχικά διπλασσιάστηκε το l1d l2 size και το cacheline_size με το νέο cpi να είναι 2.57667. Επείτα έγινε re run με τις αρχικές παραμέτρους με μόνη αλλαγή τον τετραπλασσιασμό του cacheline_size με cpi =  1.990648. Εκ νέου διπλασσιασμός του cacheline_size με cpi = 1.704294.  
+
+### Συνάρτηση κόστους  
+
 
 
 
