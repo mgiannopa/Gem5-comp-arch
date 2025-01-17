@@ -239,8 +239,10 @@ $ ./build/ARM/gem5.opt -d spec_results2/speclibm configs/example/se.py --cpu-typ
   - Spechmmer1
   - Specjeng3
   - Speclibm2
+    
 ![image](https://github.com/user-attachments/assets/6c3efdf5-4a11-4f53-9189-555e5edb8239)
-![image](https://github.com/user-attachments/assets/c6b9f7d1-151e-4279-bef4-c20106f55343)
+
+![image](https://github.com/user-attachments/assets/c6b9f7d1-151e-4279-bef4-c20106f55343)  
 
 
 
